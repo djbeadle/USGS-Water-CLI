@@ -15,7 +15,18 @@ from contextlib import closing
 # For converting string to JSON
 import json
 
-# Get the url (specified as a command line argument)
+# For pretty colors!
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+# Parse command line arguments:
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description=textwrap.dedent('''\
@@ -29,6 +40,7 @@ parser = argparse.ArgumentParser(
 )
 parser.add_argument("id")
 parser.add_argument("-d", help="Debug mode", required=False, action='store_true')
+parser.add_argument("-n", help="No waves", required=False, action='store_true')
 args = parser.parse_args()
 
 # Build the URL we're going to get the data from
@@ -41,10 +53,7 @@ if args.d == True:
     print(api_url)
     print("")
 
-# Functions supporting the scraping, stolen from RealPython.com!
-# https://realpython.com/python-web-scraping-practical-introduction/
-
-# Get the JSON response
+# Get the JSON
 def scrape_url(url):
     response = simple_get(url)
 
@@ -53,11 +62,6 @@ def scrape_url(url):
         return response
 
 def simple_get(url):
-    """
-    Attempts to get the content at `url` by making an HTTP GET request.
-    If the content-type of response is some kind of HTML/XML, return the
-    text content, otherwise return None
-    """
     try:
         with closing(get(url)) as resp:
             return resp
@@ -67,11 +71,6 @@ def simple_get(url):
         return None
 
 def log_error(e):
-    """
-    It is always a good idea to log errors. 
-    This function just prints them, but you can
-    make it do anything.
-    """
     print(e)
 
 # Intro text
@@ -83,10 +82,14 @@ station_info = scrape_url(api_url)
 station_json = station_info.json()
 time_series = station_json["value"]["timeSeries"]
 
+# Print some waves!
+if args.n == False:
+    print(bcolors.OKBLUE + '''\
+  ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   
+-'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  ``-'  `-'  `-'  `-'  `-'  `-''' + bcolors.ENDC)
+
 # Available measurements:
 i = 1
-print("#  Value\t Variable")
-print("-  -----\t --------")
 for item in time_series:
     no_data_value = item["variable"]["noDataValue"]
     variable_type = item["variable"]["valueType"]
@@ -98,7 +101,7 @@ for item in time_series:
     current_value = item["values"][0]["value"][0]["value"]
     variable_name = item["variable"]["variableName"].replace("&#179;", " cubed")
 
-    print(i, " ", current_value, "\t", variable_name+ ",", variable_type+",", site_name)
+    print(current_value, "\t", variable_name+ ",", variable_type+",", site_name)
     
     i = i + 1
 
