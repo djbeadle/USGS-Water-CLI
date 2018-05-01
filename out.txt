@@ -1,0 +1,92 @@
+Using base prefix '/Library/Frameworks/Python.framework/Versions/3.4'
+Creating /Users/Djbeadle/Documents/USGS/venv/lib/python3.4
+Symlinking Python bootstrap modules
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/lib-dynload
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/plat-darwin
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/config-3.4m
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/os.py
+  Ignoring built-in bootstrap module: posix
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/posixpath.py
+  Cannot import bootstrap module: nt
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/ntpath.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/genericpath.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/fnmatch.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/locale.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/encodings
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/codecs.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/stat.py
+  Cannot import bootstrap module: UserDict
+  Cannot import bootstrap module: copy_reg
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/types.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/re.py
+  Cannot import bootstrap module: sre
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/sre_parse.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/sre_constants.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/sre_compile.py
+  Cannot import bootstrap module: _abcoll
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/warnings.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/linecache.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/abc.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/io.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/_weakrefset.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/copyreg.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/tempfile.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/random.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/__future__.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/collections
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/keyword.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/tarfile.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/shutil.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/struct.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/copy.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/tokenize.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/token.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/functools.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/heapq.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/bisect.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/weakref.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/reprlib.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/base64.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/_dummy_thread.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/hashlib.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/hmac.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/imp.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/importlib
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/rlcompleter.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/operator.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/_collections_abc.py
+  Symlinking /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/_bootlocale.py
+Creating /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/site-packages
+Writing /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/site.py
+Writing /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/orig-prefix.txt
+Writing /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/no-global-site-packages.txt
+Creating parent directories for /Users/Djbeadle/Documents/USGS/venv/include
+Symlinking /Users/Djbeadle/Documents/USGS/venv/include/python3.4m
+Creating /Users/Djbeadle/Documents/USGS/venv/bin
+New python executable in /Users/Djbeadle/Documents/USGS/venv/bin/python3.4
+Changed mode of /Users/Djbeadle/Documents/USGS/venv/bin/python3.4 to 0o755
+Also creating executable in /Users/Djbeadle/Documents/USGS/venv/bin/python
+Changed mode of /Users/Djbeadle/Documents/USGS/venv/bin/python to 0o755
+Symlinking /Users/Djbeadle/Documents/USGS/venv/.Python
+Testing executable with /Users/Djbeadle/Documents/USGS/venv/bin/python3.4 -c "import sys;out=sys.stdout;getattr(out, "buffer", out).write(sys.prefix.encode("utf-8"))"
+Got sys.prefix result: '/Users/Djbeadle/Documents/USGS/venv'
+Creating /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/distutils
+Writing /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/distutils/__init__.py
+Writing /Users/Djbeadle/Documents/USGS/venv/lib/python3.4/distutils/distutils.cfg
+Installing setuptools, pip, wheel...
+  Collecting setuptools
+    Could not fetch URL https://pypi.python.org/simple/setuptools/: There was a problem confirming the ssl certificate: [SSL: TLSV1_ALERT_PROTOCOL_VERSION] tlsv1 alert protocol version (_ssl.c:598) - skipping
+  Collecting pip
+    Cache entry deserialization failed, entry ignored
+    Could not fetch URL https://pypi.python.org/simple/pip/: There was a problem confirming the ssl certificate: [SSL: TLSV1_ALERT_PROTOCOL_VERSION] tlsv1 alert protocol version (_ssl.c:598) - skipping
+  Collecting wheel
+    Could not fetch URL https://pypi.python.org/simple/wheel/: There was a problem confirming the ssl certificate: [SSL: TLSV1_ALERT_PROTOCOL_VERSION] tlsv1 alert protocol version (_ssl.c:598) - skipping
+  Installing collected packages: setuptools, pip, wheel
+  Successfully installed pip-9.0.1 setuptools-28.8.0 wheel-0.29.0
+...Installing setuptools, pip, wheel...done.
+Writing /Users/Djbeadle/Documents/USGS/venv/bin/activate
+Writing /Users/Djbeadle/Documents/USGS/venv/bin/activate.csh
+Writing /Users/Djbeadle/Documents/USGS/venv/bin/activate.fish
+Writing /Users/Djbeadle/Documents/USGS/venv/bin/activate_this.py
+Writing /Users/Djbeadle/Documents/USGS/venv/bin/python-config
+Changed mode of /Users/Djbeadle/Documents/USGS/venv/bin/python-config to 0o755

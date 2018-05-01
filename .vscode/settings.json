@@ -1,0 +1,3 @@
+{
+    "python.pythonPath": "${workspaceFolder}/venv2/bin/python"
+}
