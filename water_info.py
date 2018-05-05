@@ -4,6 +4,10 @@
 import argparse
 from argparse import RawDescriptionHelpFormatter
 
+# For graphing in the command line!
+# Honestly this is pretty ridiclious
+import hipsterplot
+
 # For formatting the command line arguments
 import textwrap
 
@@ -33,21 +37,59 @@ parser = argparse.ArgumentParser(
     Retrieves current USGS water data so you don't have to leave your command line.
     To find a local sensor, check https://waterdata.usgs.gov/nwis/rt
     
-    example: python water_info.py 11141280
+    examples:
+        python water_info.py 11141280 -H 24
+        python water_info.py 11141280 -D 7
+        python water_info.py 11141280 -C
     
     Depends on the wonderful python Requests library which is easily installable via pip'''
     )
 )
 parser.add_argument("id")
-parser.add_argument("-d", help="Debug mode", required=False, action='store_true')
+parser.add_argument("-d", help="Debug mode, prints out url being queried", required=False, action='store_true')
 parser.add_argument("-n", help="No waves", required=False, action='store_true')
+parser.add_argument("-r", help="Output the raw data only", required=False, action='store_true')
+
+group = parser.add_mutually_exclusive_group(required=True)
+group.add_argument("-C", help="Current data only", required=False, action='store_true')
+group.add_argument("-D", help="Specify the number of days you want data for", required=False)
+group.add_argument("-H", help="Specify the number of past hours you want data for", required=False)
+
 args = parser.parse_args()
 
-# Build the URL we're going to get the data from
-api_url = "https://waterservices.usgs.gov/nwis/iv/?format=json&sites="
-api_url += args.id
-api_url += "&siteStatus=all"
+if args.r == True:
+    args.n = True
 
+# A string with the timeframe ex: "past 12 hours", "past 3 days"
+time_string = ""
+
+# Build the URL we're going to query the data from
+# Current data:
+if args.C == True:
+    api_url = "https://waterservices.usgs.gov/nwis/iv/?format=json&sites="
+    api_url += args.id
+    api_url += "&siteStatus=all"
+    time_string = "the most recent data available"
+
+# Multiple days in the past:
+elif args.D is not None:
+    api_url = "https://waterservices.usgs.gov/nwis/iv/?format=json&sites="
+    api_url += args.id
+    api_url += "&period=P"
+    api_url += args.D
+    api_url += "D&siteStatus=all"
+    time_string = "data from the past " + args.D + " days"
+
+# Multiple hours in the past:
+elif args.H is not None:
+    api_url = "https://waterservices.usgs.gov/nwis/iv/?format=json&sites="
+    api_url += args.id
+    api_url += "&period=PT"
+    api_url += args.H
+    api_url += "H&siteStatus=all"
+    time_string = "data from the past " + args.H + " hours"
+
+# Debug mode
 if args.d == True:
     print("Scraping the following URL:")
     print(api_url)
@@ -88,23 +130,61 @@ if args.n == False:
   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   ,(   
 -'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  ``-'  `-'  `-'  `-'  `-'  `-''' + bcolors.ENDC)
 
-# Available measurements:
-i = 1
-for item in time_series:
-    no_data_value = item["variable"]["noDataValue"]
-    variable_type = item["variable"]["valueType"]
-    site_name = item["sourceInfo"]["siteName"]
-    lat = item["sourceInfo"]["geoLocation"]["geogLocation"]["latitude"]
-    long = item["sourceInfo"]["geoLocation"]["geogLocation"]["longitude"]
-    network = item["sourceInfo"]["siteCode"][0]["network"]
-    agency_code = item["sourceInfo"]["siteCode"][0]["agencyCode"]
-    current_value = item["values"][0]["value"][0]["value"]
-    variable_name = item["variable"]["variableName"].replace("&#179;", " cubed")
+# Printout the data!
+def print_current_data(time_series):
+    i = 0
+    for item in time_series:
+        no_data_value = item["variable"]["noDataValue"]
+        variable_type = item["variable"]["valueType"]
+        site_name = item["sourceInfo"]["siteName"]
+        lat = item["sourceInfo"]["geoLocation"]["geogLocation"]["latitude"]
+        long = item["sourceInfo"]["geoLocation"]["geogLocation"]["longitude"]
+        network = item["sourceInfo"]["siteCode"][0]["network"]
+        agency_code = item["sourceInfo"]["siteCode"][0]["agencyCode"]
+        current_value = item["values"][0]["value"][0]["value"]
+        variable_name = item["variable"]["variableName"].replace("&#179;", " cubed")
+        print(current_value, "\t", variable_name+ ",", variable_type+",", site_name)
+        
+        i = i + 1
 
-    print(current_value, "\t", variable_name+ ",", variable_type+",", site_name)
-    
-    i = i + 1
+    if i == 0:
+        print("No data available for this site, perhaps you entered a bad id?")
+        exit
 
-if i == 1:
-    print("No data available for this site, perhaps you entered a bad id?")
-    exit
+# Print out a graph a time series of data
+def print_series_data(time_series, time_string):
+    # Each sensor records data points in different time series
+    i = 0
+    for series in time_series:
+        # Iterate through the time stamped data points we have
+        data = []
+        timestamp = []
+
+        print(series["sourceInfo"]["siteName"])
+        print(series["variable"]["variableDescription"])
+        print("Displaying", time_string)
+        
+        for point in series["values"][0]["value"]:
+            data.append(float(point["value"]))
+            timestamp.append(i)
+            i = i+1
+        
+        hipsterplot.plot(data, timestamp)
+        print("")
+
+# No graphing, prints out the data in raw form. 
+def print_series_data_raw(time_series):
+    # Each sensor records data points in different time series
+    for series in time_series:
+        # Iterate through the time stamped data points we have
+        print(series["variable"]["variableDescription"])
+        for point in series["values"][0]["value"]:
+            print(point["dateTime"] + ", " + point["value"])
+
+print("Displaying charts for the past", args.C is not None )
+if args.C == True:
+    print_current_data(time_series)
+elif args.r == True:
+    print_series_data_raw(time_series)
+else:
+    print_series_data(time_series, time_string)
