@@ -1,0 +1,3 @@
+hipsterplot==0.1
+requests==2.18.4
+requests-futures==0.9.7

@@ -1,4 +1,4 @@
-Depends upon the venerable python Requests library.
+Do you need to see plots of USGS water data in your command line? Probably not! But now you can.
 
 [https://danielbeadle.net/blog/post/2018-04-01-usgs-water-cli/](https://danielbeadle.net/blog/post/2018-04-01-usgs-water-cli/)
 
