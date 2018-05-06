@@ -43,4 +43,4 @@ optional arguments:
   -H H        Specify the number of past hours you want data for
   ~~~
 
-![image](images/example.png)
+![image](images/example2.png)
