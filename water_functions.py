@@ -78,9 +78,14 @@ def print_series_data(time_series, time_string, width=70, height=15, use_fahrenh
         print('\033[94m')
         hipsterplot.plot(data, timestamp, num_x_chars=width, num_y_chars=height)
         print('\033[0m')
+    
+    if i == 0:
+        print("No data available for this site, perhaps you entered a bad id?")
+        exit
 
 # No graphing, prints out time series data in raw form. 
 def print_series_data_raw(time_series, use_fahrenheit=None):
+    i = 0
     # Each sensor records data points in different time series
     for series in time_series:
         site_name = series["sourceInfo"]["siteName"]
@@ -99,6 +104,11 @@ def print_series_data_raw(time_series, use_fahrenheit=None):
                 print(point["dateTime"] + ", " + str(celsius_to_fahrenheit(float(point["value"]))))
             else:
                 print(point["dateTime"] + ", " + point["value"])
+        i = i + 1
+    
+    if i == 0:
+        print("No data available for this site, perhaps you entered a bad id?")
+        exit
 
 # Get the JSON
 def scrape_url(url):
