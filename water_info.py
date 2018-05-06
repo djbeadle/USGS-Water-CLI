@@ -28,7 +28,7 @@ class bcolors:
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
     description=textwrap.dedent('''\
-    Retrieves current USGS water data so you don't have to leave your command line.
+    Retrieves current USGS water data so you don't have to leave your command line!
     To find a local sensor, check https://waterdata.usgs.gov/nwis/rt
     
     examples:

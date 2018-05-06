@@ -6,20 +6,24 @@ Do you need to see plots of USGS water data in your command line? Probably not! 
 Now has the ability to graph data- [in your terminal](https://github.com/imh/hipsterplot)!
 
 ~~~bash
-usage: water_info.py [-h] [-d] [-w] [-r] [-x X] [-y Y] (-C | -D D | -H H) id
+usage: water_info.py [-h] [-d] [-w] [-r] [-x X] [-y Y] [-f] (-C | -D D | -H H)
+                     id
 
-Retrieves current USGS water data so you don't have to leave your command line.
+Retrieves current USGS water data so you don't have to leave your command line!
 To find a local sensor, check https://waterdata.usgs.gov/nwis/rt
 
 examples:
     python3 water_info.py 11141280 -H 24
         Data for the past 24 hours
+
     python3 water_info.py 01453000 -D 7
         Data for the past 7 days
+
     python3 water_info.py 04288295 -C
-        Only the most recent data point available
+        Only displays the most recent data point available
+
     python3 water_info.py 01428750 -D 7
-        This station has a temperature sensor
+        This station has a temperature sensor, which is neat!
 
 If x & y values are not specified, the default graph width and height is 70 and 15
 
@@ -33,6 +37,7 @@ optional arguments:
   -r          Output the raw data only
   -x X        Specify the width of the graph
   -y Y        Specify the height of the graph
+  -f          Display temperature in Fahreneheit
   -C          Current data only
   -D D        Specify the number of days you want data for
   -H H        Specify the number of past hours you want data for
