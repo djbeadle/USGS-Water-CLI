@@ -115,7 +115,6 @@ if args.w == True:
 -'  `-'  `-'  `-'  `-'  `-'  `-'  `-'  ``-'  `-'  `-'  `-'  `-'  `-''' + bcolors.ENDC)
 
 # Print some graphs
-print("Displaying charts for the past", args.C is not None )
 if args.C == True:
     print_current_data(time_series)
 elif args.r == True:
