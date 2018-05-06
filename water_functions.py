@@ -7,8 +7,19 @@ from contextlib import closing
 # Honestly this is pretty ridiclious
 import hipsterplot
 
+# Replace:
+#   superscript "3" with "cubed"
+#   degree symbol with "degrees"
+def clean_variable_name(text):
+    text_temp = text.replace("&#179;", " cubed")
+    text_temp = text_temp.replace("&#176;", "degrees ")
+    return text_temp
+
+def celsius_to_fahrenheit(value):
+    return round(float(value) * (9/5) + 32, 3)
+
 # Printout a single data point
-def print_current_data(time_series):
+def print_current_data(time_series, use_fahrenheit=None):
     i = 0
     for item in time_series:
         no_data_value = item["variable"]["noDataValue"]
@@ -18,8 +29,14 @@ def print_current_data(time_series):
         long = item["sourceInfo"]["geoLocation"]["geogLocation"]["longitude"]
         network = item["sourceInfo"]["siteCode"][0]["network"]
         agency_code = item["sourceInfo"]["siteCode"][0]["agencyCode"]
+        variable_name = clean_variable_name(item["variable"]["variableName"])
         current_value = item["values"][0]["value"][0]["value"]
-        variable_name = item["variable"]["variableName"].replace("&#179;", " cubed")
+
+        if use_fahrenheit == True:
+            if "degrees C" in variable_name:
+                current_value = celsius_to_fahrenheit(item["values"][0]["value"][0]["value"])
+                variable_name = clean_variable_name(item["variable"]["variableName"]).replace("degrees C", "degrees F")
+
         print(current_value, "\t", variable_name+ ",", variable_type+",", site_name)
         
         i = i + 1
@@ -29,34 +46,59 @@ def print_current_data(time_series):
         exit
 
 # Print out a graph of time series data
-def print_series_data(time_series, time_string, width=70, height=15):
+def print_series_data(time_series, time_string, width=70, height=15, use_fahrenheit=None):
     # Each sensor records data points in different time series
     i = 0
     for series in time_series:
         # Iterate through the time stamped data points we have
         data = []
         timestamp = []
-
-        print(series["sourceInfo"]["siteName"])
-        print(series["variable"]["variableDescription"])
-        print("Displaying", time_string)
         
+        site_name = series["sourceInfo"]["siteName"]
+        variable_description = series["variable"]["variableDescription"]
+
+        convert_to_fahr = False
+        if use_fahrenheit == True:
+            if "degrees Celsius" in variable_description:
+              convert_to_fahr = True
+              variable_description = variable_description.replace("degrees Celsius", "degrees Fahrenheit")
+
+        print(site_name)
+        print(variable_description)
+        print("Displaying", time_string)
+
         for point in series["values"][0]["value"]:
-            data.append(float(point["value"]))
+            if convert_to_fahr == True:
+                data.append(celsius_to_fahrenheit(float(point["value"])))
+            else:
+                data.append(float(point["value"]))
             timestamp.append(i)
-            i = i+1
+            i = i + 1
+            
         print('\033[94m')
         hipsterplot.plot(data, timestamp, num_x_chars=width, num_y_chars=height)
         print('\033[0m')
 
 # No graphing, prints out time series data in raw form. 
-def print_series_data_raw(time_series):
+def print_series_data_raw(time_series, use_fahrenheit=None):
     # Each sensor records data points in different time series
     for series in time_series:
+        site_name = series["sourceInfo"]["siteName"]
+        variable_description = series["variable"]["variableDescription"]
+        
+        convert_to_fahr = False
+        if use_fahrenheit == True:
+            if "degrees Celsius" in variable_description:
+              convert_to_fahr = True
+              variable_description.replace("degrees Celsius", "degrees Fahrenheit")
+
         # Iterate through the time stamped data points we have
-        print(series["variable"]["variableDescription"])
+        print(variable_description)
         for point in series["values"][0]["value"]:
-            print(point["dateTime"] + ", " + point["value"])
+            if convert_to_fahr == True:
+                print(point["dateTime"] + ", " + str(celsius_to_fahrenheit(float(point["value"]))))
+            else:
+                print(point["dateTime"] + ", " + point["value"])
 
 # Get the JSON
 def scrape_url(url):

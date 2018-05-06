@@ -40,7 +40,7 @@ parser = argparse.ArgumentParser(
 
         python3 water_info.py 04288295 -C
             Only displays the most recent data point available
-            
+
         python3 water_info.py 01428750 -D 7
             This station has a temperature sensor, which is neat!
     
@@ -53,6 +53,7 @@ parser.add_argument("-w", help="Print waves", required=False, action='store_true
 parser.add_argument("-r", help="Output the raw data only", required=False, action='store_true')
 parser.add_argument("-x", help="Specify the width of the graph", required=False)
 parser.add_argument("-y", help="Specify the height of the graph", required=False)
+parser.add_argument("-f", help="Display temperature in Fahreneheit", required=False, action='store_true')
 
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument("-C", help="Current data only", required=False, action='store_true')
@@ -124,8 +125,8 @@ if args.w == True:
 
 # Print some graphs
 if args.C == True:
-    print_current_data(time_series)
+    print_current_data(time_series, use_fahrenheit=args.f)
 elif args.r == True:
-    print_series_data_raw(time_series)
+    print_series_data_raw(time_series, use_fahrenheit=args.f)
 else:
-    print_series_data(time_series, time_string, width=plot_width, height=plot_height)
+    print_series_data(time_series, time_string, width=plot_width, height=plot_height, use_fahrenheit=args.f)
