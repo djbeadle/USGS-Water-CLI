@@ -33,8 +33,16 @@ parser = argparse.ArgumentParser(
     
     examples:
         python3 water_info.py 11141280 -H 24
+            Data for the past 24 hours
+
         python3 water_info.py 01453000 -D 7
+            Data for the past 7 days
+
         python3 water_info.py 04288295 -C
+            Only displays the most recent data point available
+            
+        python3 water_info.py 01428750 -D 7
+            This station has a temperature sensor, which is neat!
     
     If x & y values are not specified, the default graph width and height is 70 and 15'''
     )
