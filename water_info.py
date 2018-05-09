@@ -27,24 +27,32 @@ class bcolors:
 # Parse command line arguments:
 parser = argparse.ArgumentParser(
     formatter_class=argparse.RawDescriptionHelpFormatter,
-    description=textwrap.dedent('''\
-    Retrieves current USGS water data so you don't have to leave your command line!
-    To find a local sensor, check https://waterdata.usgs.gov/nwis/rt
+    description=textwrap.dedent('''
+Retrieves current USGS water data so you don't have to leave your command line!
+To find a local sensor, check https://waterdata.usgs.gov/nwis/rt
     
-    examples:
-        python3 water_info.py 11141280 -H 24
-            Data for the past 24 hours
+python3 water_info.py 11141280 -H 24
+    Data for the past 24 hours
 
-        python3 water_info.py 01453000 -D 7
-            Data for the past 7 days
+python3 water_info.py 01453000 -D 7
+    Data for the past 7 days
 
-        python3 water_info.py 04288295 -C
-            Only displays the most recent data point available
+python3 water_info.py 04288295 -C
+    Only displays the most recent data point available
 
-        python3 water_info.py 01428750 -D 7
-            This station has a temperature sensor, which is neat!
-    
-    If x & y values are not specified, the default graph width and height is 70 and 15'''
+python3 water_info.py 01428750 -D 7
+    This station has a temperature sensor, which is neat!
+
+python3 water_info.py 01428750 -D 1 -s 00060,00010
+    Only display the specified measurements
+
+If -x & -y values are not specified, the default graph dimensions are 70 x 15
+
+By default this displays all the different measurements available. To specify
+which measurements to display (if available), look up the parameter codes at:
+https://help.waterdata.usgs.gov/codes-and-parameters/parameters
+and pass them as arguments to -s
+    '''
     )
 )
 parser.add_argument("id")
@@ -53,6 +61,7 @@ parser.add_argument("-w", help="Print waves", required=False, action='store_true
 parser.add_argument("-r", help="Output the raw data only", required=False, action='store_true')
 parser.add_argument("-x", help="Specify the width of the graph", required=False)
 parser.add_argument("-y", help="Specify the height of the graph", required=False)
+parser.add_argument("-s", help="Display only certain paramater codes. Specify multiple as comma seperated values with no space. By default all available readings are displayed", required=False)
 parser.add_argument("-f", help="Display temperature in Fahreneheit", required=False, action='store_true')
 
 group = parser.add_mutually_exclusive_group(required=True)
@@ -82,6 +91,9 @@ if args.C == True:
     api_url = "https://waterservices.usgs.gov/nwis/iv/?format=json&sites="
     api_url += args.id
     api_url += "&siteStatus=all"
+    if args.s is not None:
+        api_url += "&parameterCd="
+        api_url += args.s
     time_string = "the most recent data available"
 
 # Multiple days in the past:
@@ -90,7 +102,10 @@ elif args.D is not None:
     api_url += args.id
     api_url += "&period=P"
     api_url += args.D
-    api_url += "D&siteStatus=all"
+    api_url += "D&siteStatus=all" # <- Note the slight difference in the API URL "D" for days
+    if args.s is not None:
+        api_url += "&parameterCd="
+        api_url += args.s
     time_string = "data from the past " + args.D + " days"
 
 # Multiple hours in the past:
@@ -99,7 +114,10 @@ elif args.H is not None:
     api_url += args.id
     api_url += "&period=PT"
     api_url += args.H
-    api_url += "H&siteStatus=all"
+    api_url += "H&siteStatus=all" # <- Note the slight difference in the API URL "H" for hours
+    if args.s is not None:
+        api_url += "&parameterCd="
+        api_url += args.s
     time_string = "data from the past " + args.H + " hours"
 
 # Debug mode
