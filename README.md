@@ -56,4 +56,4 @@ optional arguments:
   -H H        Specify the number of past hours you want data for
   ~~~
 
-![image](images/example2.png)
+<a data-flickr-embed="true"  href="https://www.flickr.com/photos/djbeadle/41941646642/in/dateposted/" title="temp"><img src="https://farm1.staticflickr.com/952/41941646642_d74c44fe68.jpg" width="459" height="500" alt="temp"></a><script async src="//embedr.flickr.com/assets/client-code.js" charset="utf-8"></script>
