@@ -59,10 +59,11 @@ parser.add_argument("id")
 parser.add_argument("-d", help="Debug mode, prints out url being queried", required=False, action='store_true')
 parser.add_argument("-w", help="Print waves", required=False, action='store_true')
 parser.add_argument("-r", help="Output the raw data only", required=False, action='store_true')
-parser.add_argument("-x", help="Specify the width of the graph", required=False)
-parser.add_argument("-y", help="Specify the height of the graph", required=False)
 parser.add_argument("-s", help="Display only certain paramater codes. Specify multiple as comma seperated values with no space. By default all available readings are displayed", required=False)
 parser.add_argument("-f", help="Display temperature in Fahreneheit", required=False, action='store_true')
+parser.add_argument("-l", help="Print out custom sized large graphs", required=False, action='store_true')
+parser.add_argument("-x", help="Specify the custom width of the graph when in large mode", required=False)
+parser.add_argument("-y", help="Specify the custom height of the graph when in large mode", required=False)
 
 group = parser.add_mutually_exclusive_group(required=True)
 group.add_argument("-C", help="Current data only", required=False, action='store_true')
@@ -132,7 +133,14 @@ print("")
 
 # Grab the data
 station_info = scrape_url(api_url)
-station_json = station_info.json()
+try:
+    station_json = station_info.json()
+except:
+    print("An error occured while trying to fetch data from the USGS server.")
+    print("Perhaps you mistyped a param code, or something is wrong with the network.")
+    print("All param codes must be 5 digits in length ")
+    print("")
+    exit
 time_series = station_json["value"]["timeSeries"]
 
 # Print some waves!
@@ -146,5 +154,7 @@ if args.C == True:
     print_current_data(time_series, use_fahrenheit=args.f)
 elif args.r == True:
     print_series_data_raw(time_series, use_fahrenheit=args.f)
-else:
+elif args.l == True:
     print_series_data(time_series, time_string, width=plot_width, height=plot_height, use_fahrenheit=args.f)
+else:
+    print_dashboard(time_series, use_fahrenheit=args.f)

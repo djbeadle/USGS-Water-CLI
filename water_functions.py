@@ -3,9 +3,41 @@ from requests import get
 from requests.exceptions import RequestException
 from contextlib import closing
 
+# For printing the dashboard:
+# https://stackoverflow.com/a/20757491
+def bordered(text):
+    lines = text.splitlines()
+    width = 77
+    res = [' +' + '-' * width + '+']
+    for s in lines:
+        res.append(' | ' + (s + ' ' * width)[:width-1] + '|')
+    res.append(' +' + '-' * width + '+')
+    return '\n'.join(res)
+
+def bordered_append(text):
+    lines = text.splitlines()
+    width = 77
+    # res = [' +' + '-' * width + '+']
+    res = [""]
+    for s in lines:
+        res.append(' | ' + (s + ' ' * width)[:width-1] + '|')
+    res.append(' +' + '-' * width + '+')
+    return '\n'.join(res)
+
 # For graphing in the command line!
-# Honestly this is pretty ridiclious
+# Honestly this is pretty ridiclious :D
 import hipsterplot
+
+# For pretty colors!
+class bcolors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
 
 # Replace:
 #   superscript "3" with "cubed"
@@ -42,7 +74,7 @@ def print_current_data(time_series, use_fahrenheit=None):
         i = i + 1
 
     if i == 0:
-        print("No data available for this site, perhaps you entered a bad id?")
+        print("No data available for this site, perhaps you entered a bad id or param code?")
         exit
 
 # Print out a graph of time series data
@@ -80,7 +112,7 @@ def print_series_data(time_series, time_string, width=70, height=15, use_fahrenh
         print('\033[0m')
     
     if i == 0:
-        print("No data available for this site, perhaps you entered a bad id?")
+        print("No data available for this site, perhaps you entered a bad id or param code?")
         exit
 
 # No graphing, prints out time series data in raw form. 
@@ -104,10 +136,59 @@ def print_series_data_raw(time_series, use_fahrenheit=None):
                 print(point["dateTime"] + ", " + str(celsius_to_fahrenheit(float(point["value"]))))
             else:
                 print(point["dateTime"] + ", " + point["value"])
-        i = i + 1
+        i = i + 1   
     
     if i == 0:
-        print("No data available for this site, perhaps you entered a bad id?")
+        print("No data available for this site, perhaps you entered a bad id or param code?")
+        exit
+
+# Print out in dashboard format. 80 x 24 terminal size
+def print_dashboard(time_series, time_string=None, use_fahrenheit=None):
+    # print(chr(27) + "[2J")
+    print(
+        " +-----------------------------------------------------------------------------+\n",
+        "|" + bcolors.OKBLUE +"          88   88 .dP\"Y8  dP\"\"b8 .dP\"Y8     88  88 oP\"Yb.  dP\"Yb "+bcolors.ENDC+"            |\n",
+        "|" + bcolors.OKBLUE +"          88   88 `Ybo.\" dP   `\" `Ybo.\"     88  88 \"' dP' dP   Yb"+bcolors.ENDC+"            |\n",
+        "|" + bcolors.OKBLUE +"          Y8   8P o.`Y8b Yb  \"88 o.`Y8b     888888   dP'  Yb   dP/"+bcolors.ENDC+"           |\n",
+        "|" + bcolors.OKBLUE +"          `YbodP' 8bodP'  YboodP 8bodP'     88  88 .d8888  YbodP "+bcolors.ENDC+"            |\n",
+        "+-----------------------------------------------------------------------------+",
+        end=""
+    )
+    print(bordered_append(time_series[0]["sourceInfo"]["siteName"]))   
+    # Each sensor records data points in different time series
+    i = 0
+    y_loc = 10
+    for series in time_series:
+        # Iterate through the time stamped data points we have
+        data = []
+        timestamp = []
+        
+        site_name = series["sourceInfo"]["siteName"]
+        variable_description = series["variable"]["variableDescription"]
+        param_code = series["variable"]["variableCode"][0]["value"]
+
+        convert_to_fahr = False
+        if use_fahrenheit == True:
+            if "degrees Celsius" in variable_description:
+              convert_to_fahr = True
+              variable_description = variable_description.replace("degrees Celsius", "degrees Fahrenheit")
+
+        for point in series["values"][0]["value"]:
+            if convert_to_fahr == True:
+                data.append(celsius_to_fahrenheit(float(point["value"])))
+            else:
+                data.append(float(point["value"]))
+            timestamp.append(i)
+            i = i + 1
+            
+        print(bcolors.OKBLUE, end='', flush=True)
+        hipsterplot.plot(data, timestamp, num_x_chars=66, num_y_chars=8)
+        print(bcolors.ENDC, end='', flush=True)
+
+        print(bordered(param_code + " - "+ variable_description))
+    
+    if i == 0:
+        print("No data available for this site, perhaps you entered a bad id or param code?")
         exit
 
 # Get the JSON
