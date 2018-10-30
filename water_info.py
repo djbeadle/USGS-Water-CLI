@@ -1,4 +1,5 @@
-#!/opt/local/bin/python3
+#!/usr/bin/env python3
+# #!/opt/local/bin/python3
 
 # Various function definitions
 from water_functions import *
